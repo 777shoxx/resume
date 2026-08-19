@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17211b" />
+    <title>Rezum — CV builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark">R</span><span>rezum</span></a>
+      <div class="top-actions">
+        <button class="ghost-button" id="clearButton" type="button">Tozalash</button>
+        <button class="secondary-button" id="wordButton" type="button"><span>↓</span> Word</button>
+        <button class="primary-button" id="printButton" type="button"><span>↓</span> PDF</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="intro-row">
+        <div>
+          <p class="eyebrow">Yangi imkoniyatlar uchun</p>
+          <h1>Rezyumengizni<br /><em>o'zingizga moslang.</em></h1>
+        </div>
+        <p class="intro-copy">Ma'lumotlaringizni kiriting — chiroyli, professional CV tayyor. Istalgan payt PDF yoki Word sifatida yuklab oling.</p>
+      </section>
+
+      <div class="builder-grid">
+        <aside class="editor-panel">
+          <div class="panel-heading"><span>01</span><h2>Asosiy ma'lumotlar</h2></div>
+          <div class="form-grid">
+            <label class="wide photo-upload">Profil rasmi<input id="photoInput" type="file" accept="image/*" /><span class="file-hint">Ixtiyoriy · JPG yoki PNG</span></label>
+            <label class="wide">Ism va familiya<input id="nameInput" type="text" value="Azizbek Karimov" placeholder="Ism Familiya" /></label>
+            <label>Lavozim<input id="roleInput" type="text" value="Product Designer" placeholder="Masalan, Frontend Developer" /></label>
+            <label>Manzil<input id="locationInput" type="text" value="Toshkent, O'zbekiston" placeholder="Shahar, davlat" /></label>
+            <label>Email<input id="emailInput" type="email" value="azizbek@example.com" placeholder="email@example.com" /></label>
+            <label>Telefon<input id="phoneInput" type="tel" value="+998 90 123 45 67" placeholder="Telefon raqam" /></label>
+            <label class="wide">LinkedIn / Portfolio<input id="linkInput" type="text" value="linkedin.com/in/azizbek" placeholder="havola" /></label>
+          </div>
+
+          <div class="panel-heading section-start"><span>02</span><h2>O'zingiz haqingizda</h2></div>
+          <label class="wide"><textarea id="summaryInput" rows="4">Foydalanuvchi ehtiyojlarini tushunadigan va murakkab g'oyalarni sodda tajribaga aylantiradigan product designer. Raqamli mahsulotlar uchun strategiya, tadqiqot va vizual dizayn bilan shug'ullanaman.</textarea></label>
+
+          <div class="panel-heading section-start"><span>03</span><h2>Tajriba</h2><button class="add-button" id="addExperience" type="button">+ Qo'shish</button></div>
+          <div id="experienceFields" class="repeatable-fields">
+            <div class="repeatable-item"><button class="remove-button" type="button" aria-label="O'chirish">×</button><label>Kompaniya<input class="experience-company" value="North Studio" /></label><label>Lavozim<input class="experience-role" value="Senior Product Designer" /></label><label>Davr<input class="experience-date" value="2022 — Hozir" /></label><label class="wide">Tavsif<textarea class="experience-description" rows="3">Mobil va web mahsulotlar uchun design system yaratdim. Foydalanuvchi tadqiqotlari asosida onboarding jarayonini qayta ishlab, konversiyani 28% ga oshirdim.</textarea></label></div>
+          </div>
+
+          <div class="panel-heading section-start"><span>04</span><h2>Ta'lim</h2><button class="add-button" id="addEducation" type="button">+ Qo'shish</button></div>
+          <div id="educationFields" class="repeatable-fields"><div class="repeatable-item"><button class="remove-button" type="button" aria-label="O'chirish">×</button><label>O'quv muassasasi<input class="education-school" value="Toshkent Axborot Texnologiyalari Universiteti" /></label><label>Mutaxassislik<input class="education-degree" value="Computer Science" /></label><label>Davr<input class="education-date" value="2017 — 2021" /></label></div></div>
+
+          <div class="panel-heading section-start"><span>05</span><h2>Ko'nikmalar</h2></div>
+          <label class="wide"><input id="skillsInput" type="text" value="Figma, UX Research, Design Systems, Prototyping, User Testing" /></label>
+          <div class="panel-heading section-start"><span>06</span><h2>Qo'shimcha bo'limlar</h2><button class="add-button" id="addSection" type="button">+ Section qo'shish</button></div>
+          <div id="customSections" class="repeatable-fields"></div>
+          <div class="panel-heading section-start"><span>07</span><h2>CV uslubi</h2></div>
+          <div class="style-picker"><button class="style-choice active" data-style="classic" type="button"><span class="style-sample classic-sample"></span><b>Classic</b></button><button class="style-choice" data-style="editorial" type="button"><span class="style-sample editorial-sample"></span><b>Editorial</b></button><button class="style-choice" data-style="minimal" type="button"><span class="style-sample minimal-sample"></span><b>Minimal</b></button><button class="style-choice" data-style="bold" type="button"><span class="style-sample bold-sample"></span><b>Bold</b></button><button class="style-choice" data-style="modern" type="button"><span class="style-sample modern-sample"></span><b>Modern</b></button><button class="style-choice" data-style="mono" type="button"><span class="style-sample mono-sample"></span><b>Mono</b></button><button class="style-choice" data-style="compact" type="button"><span class="style-sample compact-sample"></span><b>Compact</b></button></div>
+          <div class="style-row"><div><span class="style-label">Accent rangi</span><div class="swatches"><button class="swatch active" data-color="#d65a3c" style="--swatch:#d65a3c" aria-label="Coral"></button><button class="swatch" data-color="#3478a4" style="--swatch:#3478a4" aria-label="Blue"></button><button class="swatch" data-color="#9b723e" style="--swatch:#9b723e" aria-label="Ochre"></button><button class="swatch" data-color="#56806b" style="--swatch:#56806b" aria-label="Green"></button></div></div><span class="saved-note">● Avtomatik saqlandi</span></div>
+        </aside>
+
+        <section class="preview-wrap"><div class="preview-toolbar"><span>Jonli ko'rinish</span><span class="a4-label">A4 · 100%</span></div><article class="resume-paper" id="resumePaper"><div class="resume-header"><img id="previewPhoto" class="profile-photo" alt="Profil rasmi" hidden /><div><h2 id="previewName">Azizbek Karimov</h2><p id="previewRole">Product Designer</p></div><div class="resume-contact"><span id="previewLocation">Toshkent, O'zbekiston</span><span id="previewEmail">azizbek@example.com</span><span id="previewPhone">+998 90 123 45 67</span><span id="previewLink">linkedin.com/in/azizbek</span></div></div><div class="resume-body"><div class="resume-main"><section><h3>Profil</h3><p id="previewSummary">Foydalanuvchi ehtiyojlarini tushunadigan va murakkab g'oyalarni sodda tajribaga aylantiradigan product designer. Raqamli mahsulotlar uchun strategiya, tadqiqot va vizual dizayn bilan shug'ullanaman.</p></section><section><h3>Tajriba</h3><div id="previewExperience"><div class="resume-entry"><div class="entry-top"><strong>Senior Product Designer</strong><span>2022 — Hozir</span></div><p class="accent-text">North Studio</p><p>Mobil va web mahsulotlar uchun design system yaratdim. Foydalanuvchi tadqiqotlari asosida onboarding jarayonini qayta ishlab, konversiyani 28% ga oshirdim.</p></div></div></section><section><h3>Ta'lim</h3><div id="previewEducation"><div class="resume-entry"><div class="entry-top"><strong>Computer Science</strong><span>2017 — 2021</span></div><p class="accent-text">Toshkent Axborot Texnologiyalari Universiteti</p></div></section><div id="previewCustomSections"></div></div><aside class="resume-side"><section><h3>Ko'nikmalar</h3><div id="previewSkills" class="skill-list"><span>Figma</span><span>UX Research</span><span>Design Systems</span><span>Prototyping</span><span>User Testing</span></div></section><section><h3>Tillar</h3><p>O'zbek — Ona tili</p><p>Ingliz — B2</p><p>Rus — B1</p></section></aside></div><footer class="resume-footer"><span>REZUM / 2026</span><span>azizbek@example.com</span></footer></article></section>
+      </div>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
