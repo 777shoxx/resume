@@ -82,13 +82,38 @@ function addCustomSection() {
 }
 
 async function downloadPdf() {
-  if (!window.html2canvas || !window.jspdf) return;
-  const paper = document.getElementById('resumePaper');
-  const canvas = await window.html2canvas(paper, { scale: 2, backgroundColor: '#fffdf8', useCORS: true });
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 210, 297);
-  pdf.save(`${(getText('nameInput') || 'resume').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.pdf`);
+  if (!window.html2canvas || !window.jspdf?.jsPDF) {
+    window.alert('PDF kutubxonalari yuklanmadi. Internetni tekshirib, qayta urinib ko\'ring.');
+    return;
+  }
+  const source = document.getElementById('resumePaper');
+  const paper = source.cloneNode(true);
+  Object.assign(paper.style, { position: 'fixed', left: '-10000px', top: '0', width: '794px', minWidth: '794px', height: '1123px', minHeight: '1123px', margin: '0', boxShadow: 'none', overflow: 'hidden' });
+  document.body.append(paper);
+  try {
+    if (document.fonts?.ready) await document.fonts.ready;
+    const canvas = await window.html2canvas(paper, { scale: 2, backgroundColor: '#fffdf8', useCORS: true, logging: false });
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'mm', 'a4', true);
+    const pageWidth = 210; const pageHeight = 297;
+    const imageRatio = canvas.height / canvas.width;
+    const imageWidth = Math.min(pageWidth, pageHeight / imageRatio);
+    const imageHeight = imageWidth * imageRatio;
+    pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', (pageWidth - imageWidth) / 2, (pageHeight - imageHeight) / 2, imageWidth, imageHeight, undefined, 'FAST');
+    const fileName = `${(getText('nameInput') || 'resume').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.pdf`;
+    const blob = pdf.output('blob');
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob); link.download = fileName; link.rel = 'noopener';
+    document.body.append(link);
+    if ('download' in link) link.click();
+    else window.open(link.href, '_blank', 'noopener');
+    setTimeout(() => { URL.revokeObjectURL(link.href); link.remove(); }, 1000);
+  } catch (error) {
+    console.error('PDF export failed:', error);
+    window.alert('PDF yaratib bo\'lmadi. Ma\'lumotlarni tekshirib, qayta urinib ko\'ring.');
+  } finally {
+    paper.remove();
+  }
 }
 
 document.querySelectorAll('input, textarea').forEach((input) => input.addEventListener('input', updatePreview));
