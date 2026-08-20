@@ -4,52 +4,75 @@ const fields = {
 };
 
 const translations = {
-  uz: { clear: 'Tozalash', live: "Jonli ko'rinish", profile: 'Profil', experience: 'Tajriba', education: "Ta'lim", skills: "Ko'nikmalar", languages: 'Tillar', name: 'Ism va familiya', role: 'Lavozim', location: 'Manzil', email: 'Email', phone: 'Telefon', link: 'LinkedIn / Portfolio', dark: '☾ Dark', light: '☀ Light' },
-  ru: { clear: 'Очистить', live: 'Предпросмотр', profile: 'Профиль', experience: 'Опыт', education: 'Образование', skills: 'Навыки', languages: 'Языки', name: 'Имя и фамилия', role: 'Должность', location: 'Адрес', email: 'Email', phone: 'Телефон', link: 'LinkedIn / Портфолио', dark: '☾ Тёмная', light: '☀ Светлая' },
-  en: { clear: 'Clear', live: 'Live preview', profile: 'Profile', experience: 'Experience', education: 'Education', skills: 'Skills', languages: 'Languages', name: 'Full name', role: 'Job title', location: 'Location', email: 'Email', phone: 'Phone', link: 'LinkedIn / Portfolio', dark: '☾ Dark', light: '☀ Light' }
+  uz: { clear: 'Tozalash', live: "Jonli ko'rinish", profile: 'Profil', experience: 'Tajriba', education: "Ta'lim", skills: "Ko'nikmalar", languages: 'Tillar', name: 'Ism va familiya', role: 'Lavozim', location: 'Shahar', email: 'Email', phone: 'Telefon', link: 'LinkedIn / Portfolio', summary: "O'zingiz haqingizda", company: 'Kompaniya', period: 'Davr', description: 'Tavsif', school: "O'quv muassasasi", degree: 'Mutaxassislik', add: "+ Qo'shish", extra: "Qo'shimcha bo'limlar", style: 'CV uslubi', skillsHint: 'Vergul bilan ajrating: JavaScript, Figma, Excel', dark: '☾ Dark', light: '☀ Light' },
+  ru: { clear: 'Очистить', live: 'Предпросмотр', profile: 'Профиль', experience: 'Опыт', education: 'Образование', skills: 'Навыки', languages: 'Языки', name: 'Имя и фамилия', role: 'Должность', location: 'Город', email: 'Email', phone: 'Телефон', link: 'LinkedIn / Портфолио', summary: 'О себе', company: 'Компания', period: 'Период', description: 'Описание', school: 'Учебное заведение', degree: 'Специальность', add: '+ Добавить', extra: 'Дополнительные разделы', style: 'Стиль CV', skillsHint: 'Разделяйте запятыми: JavaScript, Figma, Excel', dark: '☾ Тёмная', light: '☀ Светлая' },
+  en: { clear: 'Clear', live: 'Live preview', profile: 'Profile', experience: 'Experience', education: 'Education', skills: 'Skills', languages: 'Languages', name: 'Full name', role: 'Job title', location: 'Your city', email: 'Email', phone: 'Phone', link: 'LinkedIn / Portfolio', summary: 'About you', company: 'Company', period: 'Period', description: 'Description', school: 'School', degree: 'Degree', add: '+ Add', extra: 'Additional sections', style: 'CV style', skillsHint: 'Separate with commas: JavaScript, Figma, Excel', dark: '☾ Dark', light: '☀ Light' }
+};
+const placeholders = {
+  uz: { nameInput: 'Ism Familiya', roleInput: 'Masalan, Frontend Developer', locationInput: 'Shahar, davlat', emailInput: 'email@example.com', phoneInput: 'Telefon raqam', linkInput: 'havola', summaryInput: 'Qisqacha professional profil', skillsInput: 'Vergul bilan ajrating: JavaScript, Figma, Excel' },
+  ru: { nameInput: 'Имя Фамилия', roleInput: 'Например, Frontend Developer', locationInput: 'Город, страна', emailInput: 'email@example.com', phoneInput: 'Номер телефона', linkInput: 'Ссылка', summaryInput: 'Краткий профессиональный профиль', skillsInput: 'Разделяйте запятыми: JavaScript, Figma, Excel' },
+  en: { nameInput: 'Full name', roleInput: 'For example, Frontend Developer', locationInput: 'City, country', emailInput: 'email@example.com', phoneInput: 'Phone number', linkInput: 'Link', summaryInput: 'Short professional profile', skillsInput: 'Separate with commas: JavaScript, Figma, Excel' }
+};
+const uiTranslations = {
+  uz: ['Yangi imkoniyatlar uchun', "Rezyumengizni", "o'zingizga moslang.", "Ma'lumotlaringizni kiriting — chiroyli, professional CV tayyor. Istalgan payt PDF yoki Word sifatida yuklab oling.", "Asosiy ma'lumotlar", "O'zingiz haqingizda", 'Tajriba', "Ta'lim", "Ko'nikmalar", "Qo'shimcha bo'limlar", 'CV uslubi', 'Profil rasmi', 'Ixtiyoriy · JPG yoki PNG', 'Accent rangi', '● Avtomatik saqlandi'],
+  ru: ['Для новых возможностей', 'Создайте резюме', 'в своем стиле.', 'Введите данные — получите красивое профессиональное CV. Скачайте его в PDF или Word в любое время.', 'Основная информация', 'О себе', 'Опыт', 'Образование', 'Навыки', 'Дополнительные разделы', 'Стиль CV', 'Фото профиля', 'Необязательно · JPG или PNG', 'Цвет акцента', '● Сохранено автоматически'],
+  en: ['For new opportunities', 'Build your resume', 'your way.', 'Enter your details and get a polished professional CV. Download it as PDF or Word anytime.', 'Basic information', 'About you', 'Experience', 'Education', 'Skills', 'Additional sections', 'CV style', 'Profile photo', 'Optional · JPG or PNG', 'Accent color', '● Saved automatically']
 };
 
 const getText = (id) => document.getElementById(id)?.value.trim() || '';
+const getItemText = (item, selector) => item.querySelector(selector)?.value.trim() || '';
 const escapeHtml = (value) => value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
 
 function updateRepeatingPreview() {
   document.getElementById('previewExperience').innerHTML = [...document.querySelectorAll('#experienceFields .repeatable-item')].map((item) => {
-    const role = getTextFrom(item, '.experience-role');
-    const date = getTextFrom(item, '.experience-date');
-    const company = getTextFrom(item, '.experience-company');
-    const description = getTextFrom(item, '.experience-description');
+    const role = getItemText(item, '.experience-role'); const date = getItemText(item, '.experience-date'); const company = getItemText(item, '.experience-company'); const description = getItemText(item, '.experience-description');
     if (!role && !date && !company && !description) return '';
     return `<div class="resume-entry"><div class="entry-top"><strong>${escapeHtml(role)}</strong><span>${escapeHtml(date)}</span></div><p class="accent-text">${escapeHtml(company)}</p><p>${escapeHtml(description)}</p></div>`;
   }).join('');
   document.getElementById('previewEducation').innerHTML = [...document.querySelectorAll('#educationFields .repeatable-item')].map((item) => {
-    const school = getTextFrom(item, '.education-school');
-    const degree = getTextFrom(item, '.education-degree');
-    const date = getTextFrom(item, '.education-date');
+    const school = getItemText(item, '.education-school'); const degree = getItemText(item, '.education-degree'); const date = getItemText(item, '.education-date');
     if (!school && !degree && !date) return '';
     return `<div class="resume-entry"><div class="entry-top"><strong>${escapeHtml(degree)}</strong><span>${escapeHtml(date)}</span></div><p class="accent-text">${escapeHtml(school)}</p></div>`;
   }).join('');
-  const skills = getText('skillsInput').split(',').map((skill) => skill.trim()).filter(Boolean);
-  document.getElementById('previewSkills').innerHTML = skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join('');
-  document.getElementById('previewCustomSections').innerHTML = [...document.querySelectorAll('#customSections .custom-section')].map((item) => `<section><h3>${escapeHtml(getTextFrom(item, '.custom-title'))}</h3><p>${escapeHtml(getTextFrom(item, '.custom-content'))}</p></section>`).join('');
+  document.getElementById('previewSkills').innerHTML = getText('skillsInput').split(',').map((skill) => skill.trim()).filter(Boolean).map((skill) => `<span>${escapeHtml(skill)}</span>`).join('');
+  document.getElementById('previewCustomSections').innerHTML = [...document.querySelectorAll('#customSections .custom-section')].map((item) => `<section><h3>${escapeHtml(getItemText(item, '.custom-title'))}</h3><p>${escapeHtml(getItemText(item, '.custom-content'))}</p></section>`).join('');
 }
-
-function getTextFrom(item, selector) { return item.querySelector(selector)?.value.trim() || ''; }
 
 function updatePreview() {
   Object.entries(fields).forEach(([inputId, previewId]) => { document.getElementById(previewId).textContent = getText(inputId); });
   updateRepeatingPreview();
 }
 
+function applyLanguage(language) {
+  const copy = translations[language];
+  const placeholderCopy = placeholders[language];
+  document.documentElement.lang = language;
+  document.querySelectorAll('[data-i18n]').forEach((element) => { if (copy[element.dataset.i18n]) element.childNodes[0].textContent = copy[element.dataset.i18n]; });
+  document.querySelectorAll('[data-placeholder]').forEach((element) => { element.placeholder = copy[element.dataset.placeholder] || element.placeholder; });
+  const labels = { nameInput: 'name', roleInput: 'role', locationInput: 'location', emailInput: 'email', phoneInput: 'phone', linkInput: 'link', summaryInput: 'summary', skillsInput: 'skillsHint' };
+  Object.entries(labels).forEach(([id, key]) => { const input = document.getElementById(id); if (input) { input.placeholder = placeholderCopy[id]; const label = input.closest('label'); if (label && copy[key]) label.childNodes[0].textContent = copy[key]; } });
+  const sectionHeadings = { '.resume-main section:nth-child(1) h3': 'profile', '.resume-main section:nth-child(2) h3': 'experience', '.resume-main section:nth-child(3) h3': 'education', '.resume-side section:nth-child(1) h3': 'skills' };
+  Object.entries(sectionHeadings).forEach(([selector, key]) => { const element = document.querySelector(selector); if (element) element.textContent = copy[key]; });
+  document.querySelectorAll('#experienceFields .repeatable-item label, #educationFields .repeatable-item label').forEach((label) => { const input = label.querySelector('input, textarea'); const key = input?.className.includes('company') ? 'company' : input?.className.includes('experience-role') ? 'role' : input?.className.includes('degree') ? 'degree' : input?.className.includes('date') ? 'period' : input?.className.includes('description') ? 'description' : input?.className.includes('school') ? 'school' : ''; if (key && copy[key]) label.childNodes[0].textContent = copy[key]; });
+  document.querySelectorAll('.add-button').forEach((button) => { button.textContent = copy.add; });
+  const ui = uiTranslations[language];
+  const uiElements = [document.querySelector('.eyebrow'), document.querySelector('.intro-row h1'), document.querySelector('.intro-row h1 em'), document.querySelector('.intro-copy'), ...document.querySelectorAll('.panel-heading h2'), document.querySelector('.photo-upload'), document.querySelector('.file-hint'), document.querySelector('.style-label'), document.querySelector('.saved-note')];
+  uiElements.forEach((element, index) => { if (element && ui[index]) element.childNodes[0].textContent = ui[index]; });
+  document.getElementById('clearButton').textContent = copy.clear;
+  document.getElementById('themeButton').textContent = document.body.classList.contains('dark-mode') ? copy.light : copy.dark;
+  localStorage.setItem('resume-language', language);
+}
+
 function addExperience() {
   const item = document.createElement('div'); item.className = 'repeatable-item';
-  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label>Kompaniya<input class="experience-company" placeholder="Kompaniya nomi" /></label><label>Lavozim<input class="experience-role" placeholder="Lavozim" /></label><label>Davr<input class="experience-date" placeholder="2022 — 2024" /></label><label class="wide">Tavsif<textarea class="experience-description" rows="3" placeholder="Vazifalaringiz va natijalaringiz"></textarea></label>';
-  document.getElementById('experienceFields').append(item);
+  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label data-i18n="company">Kompaniya<input class="experience-company" data-placeholder="companyName" placeholder="Kompaniya nomi" /></label><label data-i18n="role">Lavozim<input class="experience-role" data-placeholder="role" placeholder="Lavozim" /></label><label data-i18n="period">Davr<input class="experience-date" placeholder="2022 — 2024" /></label><label class="wide" data-i18n="description">Tavsif<textarea class="experience-description" data-placeholder="descriptionHint" rows="3" placeholder="Vazifalaringiz va natijalaringiz"></textarea></label>';
+  document.getElementById('experienceFields').append(item); applyLanguage(document.getElementById('languageSelect').value);
 }
 
 function addEducation() {
   const item = document.createElement('div'); item.className = 'repeatable-item';
-  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label>O\'quv muassasasi<input class="education-school" placeholder="Universitet yoki kurs" /></label><label>Mutaxassislik<input class="education-degree" placeholder="Mutaxassislik" /></label><label>Davr<input class="education-date" placeholder="2018 — 2022" /></label>';
-  document.getElementById('educationFields').append(item);
+  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label data-i18n="school">O\'quv muassasasi<input class="education-school" placeholder="Universitet yoki kurs" /></label><label data-i18n="degree">Mutaxassislik<input class="education-degree" placeholder="Mutaxassislik" /></label><label data-i18n="period">Davr<input class="education-date" placeholder="2018 — 2022" /></label>';
+  document.getElementById('educationFields').append(item); applyLanguage(document.getElementById('languageSelect').value);
 }
 
 function addCustomSection() {
@@ -58,127 +81,32 @@ function addCustomSection() {
   document.getElementById('customSections').append(item); item.querySelector('.custom-title').focus(); updateRepeatingPreview();
 }
 
-const setLanguage = (language) => {
-  const copy = translations[language];
-  document.documentElement.lang = language;
-  document.querySelectorAll('[data-i18n]').forEach((element) => { if (copy[element.dataset.i18n]) element.childNodes[0].textContent = copy[element.dataset.i18n]; });
-  document.getElementById('clearButton').textContent = copy.clear;
-  document.getElementById('themeButton').textContent = document.body.classList.contains('dark-mode') ? copy.light : copy.dark;
-  localStorage.setItem('resume-language', language);
-};
+async function downloadPdf() {
+  if (!window.html2canvas || !window.jspdf) return;
+  const paper = document.getElementById('resumePaper');
+  const canvas = await window.html2canvas(paper, { scale: 2, backgroundColor: '#fffdf8', useCORS: true });
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, 210, 297);
+  pdf.save(`${(getText('nameInput') || 'resume').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.pdf`);
+}
 
 document.querySelectorAll('input, textarea').forEach((input) => input.addEventListener('input', updatePreview));
 document.getElementById('addExperience').addEventListener('click', addExperience);
 document.getElementById('addEducation').addEventListener('click', addEducation);
 document.getElementById('addSection').addEventListener('click', addCustomSection);
 document.addEventListener('click', (event) => { if (event.target.classList.contains('remove-button')) { event.target.parentElement.remove(); updatePreview(); } });
-document.getElementById('photoInput').addEventListener('change', (event) => {
-  const [file] = event.target.files; const photo = document.getElementById('previewPhoto');
-  if (!file) { photo.hidden = true; photo.removeAttribute('src'); return; }
-  const reader = new FileReader(); reader.addEventListener('load', () => { photo.src = reader.result; photo.hidden = false; }); reader.readAsDataURL(file);
-});
-document.getElementById('printButton').addEventListener('click', () => window.print());
-document.getElementById('wordButton').addEventListener('click', () => {
-  const paper = document.getElementById('resumePaper').cloneNode(true); const name = getText('nameInput') || 'resume';
-  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(name)}</title><style>@page{size:A4;margin:1.5cm}body{font-family:Arial;color:#17211b}.resume-paper{width:18cm;margin:auto}.resume-header{display:flex;justify-content:space-between;border-bottom:3px solid #17211b;padding-bottom:18px}.resume-contact{text-align:right;font-size:10px;line-height:1.6}.resume-body{display:flex;gap:28px;padding-top:20px}.resume-main{flex:1}.resume-side{width:130px;border-left:1px solid #ddd;padding-left:18px}p{font-size:11px;line-height:1.55}h3{font-size:10px;text-transform:uppercase;color:#d65a3c}</style></head><body>${paper.outerHTML}</body></html>`;
-  const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword' })); link.download = `${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.doc`; link.click(); URL.revokeObjectURL(link.href);
-});
+document.getElementById('photoInput').addEventListener('change', (event) => { const [file] = event.target.files; const photo = document.getElementById('previewPhoto'); if (!file) { photo.hidden = true; return; } const reader = new FileReader(); reader.addEventListener('load', () => { photo.src = reader.result; photo.hidden = false; }); reader.readAsDataURL(file); });
+document.getElementById('printButton').addEventListener('click', downloadPdf);
+document.getElementById('wordButton').addEventListener('click', () => { const paper = document.getElementById('resumePaper').cloneNode(true); const name = getText('nameInput') || 'resume'; const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([`<!doctype html><html><body>${paper.outerHTML}</body></html>`], { type: 'application/msword' })); link.download = `${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.doc`; link.click(); URL.revokeObjectURL(link.href); });
 document.querySelectorAll('.swatch').forEach((swatch) => swatch.addEventListener('click', () => { document.documentElement.style.setProperty('--accent', swatch.dataset.color); document.querySelector('.swatch.active')?.classList.remove('active'); swatch.classList.add('active'); }));
 document.querySelectorAll('.style-choice').forEach((choice) => choice.addEventListener('click', () => { document.getElementById('resumePaper').className = `resume-paper style-${choice.dataset.style}`; document.querySelector('.style-choice.active')?.classList.remove('active'); choice.classList.add('active'); }));
-document.getElementById('themeButton').addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLanguage(document.getElementById('languageSelect').value); });
-document.getElementById('languageSelect').addEventListener('change', (event) => setLanguage(event.target.value));
+document.getElementById('themeButton').addEventListener('click', () => { document.body.classList.toggle('dark-mode'); applyLanguage(document.getElementById('languageSelect').value); });
+document.getElementById('languageSelect').addEventListener('change', (event) => applyLanguage(event.target.value));
 document.getElementById('clearButton').addEventListener('click', () => { if (!window.confirm('Barcha ma\'lumotlar tozalansinmi?')) return; document.querySelectorAll('input, textarea').forEach((field) => { if (field.id !== 'photoInput') field.value = ''; }); document.getElementById('previewPhoto').hidden = true; updatePreview(); });
 
 document.querySelector('.resume-footer').textContent = '';
-const staticLanguages = document.querySelector('.resume-side section:nth-child(2)');
-if (staticLanguages) staticLanguages.remove();
+document.querySelector('.resume-side section:nth-child(2)')?.remove();
 document.getElementById('languageSelect').value = localStorage.getItem('resume-language') || 'uz';
-setLanguage(document.getElementById('languageSelect').value);
+applyLanguage(document.getElementById('languageSelect').value);
 updatePreview();
-
-Object.entries(fields).forEach(([inputId, previewId]) => {
-  const input = document.getElementById(inputId);
-  const preview = document.getElementById(previewId);
-  input.addEventListener('input', () => { preview.textContent = input.value || input.placeholder; });
-});
-
-document.getElementById('photoInput').addEventListener('change', (event) => {
-  const [file] = event.target.files;
-  const photo = document.getElementById('previewPhoto');
-  if (!file) { photo.hidden = true; photo.removeAttribute('src'); return; }
-  const reader = new FileReader();
-  reader.addEventListener('load', () => { photo.src = reader.result; photo.hidden = false; });
-  reader.readAsDataURL(file);
-});
-
-function updateRepeatingPreview() {
-  const experiencePreview = document.getElementById('previewExperience');
-  experiencePreview.innerHTML = [...document.querySelectorAll('#experienceFields .repeatable-item')].map((item) => `
-    <div class="resume-entry"><div class="entry-top"><strong>${item.querySelector('.experience-role').value}</strong><span>${item.querySelector('.experience-date').value}</span></div><p class="accent-text">${item.querySelector('.experience-company').value}</p><p>${item.querySelector('.experience-description').value}</p></div>`).join('');
-  const educationPreview = document.getElementById('previewEducation');
-  educationPreview.innerHTML = [...document.querySelectorAll('#educationFields .repeatable-item')].map((item) => `
-    <div class="resume-entry"><div class="entry-top"><strong>${item.querySelector('.education-degree').value}</strong><span>${item.querySelector('.education-date').value}</span></div><p class="accent-text">${item.querySelector('.education-school').value}</p></div>`).join('');
-  const skills = document.getElementById('skillsInput').value.split(',').map((skill) => skill.trim()).filter(Boolean);
-  document.getElementById('previewSkills').innerHTML = skills.map((skill) => `<span>${skill}</span>`).join('');
-  document.getElementById('previewCustomSections').innerHTML = [...document.querySelectorAll('#customSections .custom-section')].map((item) => `
-    <section><h3>${item.querySelector('.custom-title').value || 'Qo\'shimcha bo\'lim'}</h3><p>${item.querySelector('.custom-content').value}</p></section>`).join('');
-}
-
-document.addEventListener('input', (event) => {
-  if (event.target.closest('.repeatable-item') || event.target.id === 'skillsInput') updateRepeatingPreview();
-});
-
-function addExperience() {
-  const item = document.createElement('div'); item.className = 'repeatable-item';
-  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label>Kompaniya<input class="experience-company" placeholder="Kompaniya nomi" /></label><label>Lavozim<input class="experience-role" placeholder="Lavozim" /></label><label>Davr<input class="experience-date" placeholder="2022 — 2024" /></label><label class="wide">Tavsif<textarea class="experience-description" rows="3" placeholder="Vazifalaringiz va natijalaringiz"></textarea></label>';
-  document.getElementById('experienceFields').append(item);
-}
-function addEducation() {
-  const item = document.createElement('div'); item.className = 'repeatable-item';
-  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label>O\'quv muassasasi<input class="education-school" placeholder="Universitet yoki kurs" /></label><label>Mutaxassislik<input class="education-degree" placeholder="Mutaxassislik" /></label><label>Davr<input class="education-date" placeholder="2018 — 2022" /></label>';
-  document.getElementById('educationFields').append(item);
-}
-
-function addCustomSection() {
-  const item = document.createElement('div'); item.className = 'repeatable-item custom-section';
-  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label class="wide">Section nomi<input class="custom-title" value="Sertifikatlar" /></label><label class="wide">Ma\'lumot<textarea class="custom-content" rows="3" placeholder="Sertifikat, mukofot, loyiha yoki boshqa ma\'lumot"></textarea></label>';
-  document.getElementById('customSections').append(item);
-  updateRepeatingPreview();
-  item.querySelector('.custom-title').focus();
-}
-
-document.getElementById('addExperience').addEventListener('click', addExperience);
-document.getElementById('addEducation').addEventListener('click', addEducation);
-document.getElementById('addSection').addEventListener('click', addCustomSection);
-document.addEventListener('click', (event) => {
-  if (event.target.classList.contains('remove-button')) { event.target.parentElement.remove(); updateRepeatingPreview(); }
-});
-document.getElementById('printButton').addEventListener('click', () => window.print());
-document.getElementById('wordButton').addEventListener('click', () => {
-  const paper = document.getElementById('resumePaper').cloneNode(true);
-  paper.querySelectorAll('[hidden]').forEach((element) => element.removeAttribute('hidden'));
-  const wordStyles = `<style>@page{size:A4;margin:1.5cm}body{font-family:Arial,sans-serif;color:#17211b}.resume-paper{width:18cm;margin:auto}.resume-header{display:flex;justify-content:space-between;border-bottom:3px solid #17211b;padding-bottom:18px}.resume-header h2{font-family:Georgia,serif;font-size:28px;margin:0 0 6px}.resume-header p,h3,.accent-text{color:#d65a3c}.resume-contact{text-align:right;font-size:10px;line-height:1.6}.resume-body{display:flex;gap:28px;padding-top:20px}.resume-main{flex:1}.resume-side{width:130px;border-left:1px solid #ddd;padding-left:18px}h3{font-size:10px;text-transform:uppercase;letter-spacing:2px;margin:0 0 8px}p{font-size:11px;line-height:1.55}.entry-top{display:flex;justify-content:space-between}.entry-top strong{font-size:12px}.entry-top span{font-size:10px}.skill-list span{display:inline-block;border:1px solid #ccc;padding:4px;margin:2px;font-size:9px}.profile-photo{width:60px;height:60px;object-fit:cover;border-radius:50%}.resume-footer{border-top:1px solid #ddd;padding-top:12px;font-size:8px;display:flex;justify-content:space-between}</style>`;
-  const name = document.getElementById('previewName').textContent || 'resume';
-  const documentHtml = `<!doctype html><html><head><meta charset="utf-8"><title>${name}</title>${wordStyles}</head><body>${paper.outerHTML}</body></html>`;
-  const blob = new Blob(['\ufeff', documentHtml], { type: 'application/msword' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = `${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.doc`;
-  link.click();
-  URL.revokeObjectURL(link.href);
-});
-document.querySelectorAll('.swatch').forEach((swatch) => swatch.addEventListener('click', () => {
-  document.documentElement.style.setProperty('--accent', swatch.dataset.color);
-  document.querySelector('.swatch.active').classList.remove('active'); swatch.classList.add('active');
-}));
-document.querySelectorAll('.style-choice').forEach((choice) => choice.addEventListener('click', () => {
-  const paper = document.getElementById('resumePaper');
-  paper.className = `resume-paper style-${choice.dataset.style}`;
-  document.querySelector('.style-choice.active').classList.remove('active'); choice.classList.add('active');
-}));
-document.getElementById('clearButton').addEventListener('click', () => {
-  if (!window.confirm('Barcha ma\'lumotlar tozalansinmi?')) return;
-  document.querySelectorAll('input, textarea').forEach((field) => { field.value = ''; });
-  Object.entries(fields).forEach(([inputId, previewId]) => { document.getElementById(previewId).textContent = ''; });
-  updateRepeatingPreview();
-});
