@@ -3,6 +3,99 @@ const fields = {
   emailInput: 'previewEmail', phoneInput: 'previewPhone', linkInput: 'previewLink', summaryInput: 'previewSummary'
 };
 
+const translations = {
+  uz: { clear: 'Tozalash', live: "Jonli ko'rinish", profile: 'Profil', experience: 'Tajriba', education: "Ta'lim", skills: "Ko'nikmalar", languages: 'Tillar', name: 'Ism va familiya', role: 'Lavozim', location: 'Manzil', email: 'Email', phone: 'Telefon', link: 'LinkedIn / Portfolio', dark: '☾ Dark', light: '☀ Light' },
+  ru: { clear: 'Очистить', live: 'Предпросмотр', profile: 'Профиль', experience: 'Опыт', education: 'Образование', skills: 'Навыки', languages: 'Языки', name: 'Имя и фамилия', role: 'Должность', location: 'Адрес', email: 'Email', phone: 'Телефон', link: 'LinkedIn / Портфолио', dark: '☾ Тёмная', light: '☀ Светлая' },
+  en: { clear: 'Clear', live: 'Live preview', profile: 'Profile', experience: 'Experience', education: 'Education', skills: 'Skills', languages: 'Languages', name: 'Full name', role: 'Job title', location: 'Location', email: 'Email', phone: 'Phone', link: 'LinkedIn / Portfolio', dark: '☾ Dark', light: '☀ Light' }
+};
+
+const getText = (id) => document.getElementById(id)?.value.trim() || '';
+const escapeHtml = (value) => value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
+
+function updateRepeatingPreview() {
+  document.getElementById('previewExperience').innerHTML = [...document.querySelectorAll('#experienceFields .repeatable-item')].map((item) => {
+    const role = getTextFrom(item, '.experience-role');
+    const date = getTextFrom(item, '.experience-date');
+    const company = getTextFrom(item, '.experience-company');
+    const description = getTextFrom(item, '.experience-description');
+    if (!role && !date && !company && !description) return '';
+    return `<div class="resume-entry"><div class="entry-top"><strong>${escapeHtml(role)}</strong><span>${escapeHtml(date)}</span></div><p class="accent-text">${escapeHtml(company)}</p><p>${escapeHtml(description)}</p></div>`;
+  }).join('');
+  document.getElementById('previewEducation').innerHTML = [...document.querySelectorAll('#educationFields .repeatable-item')].map((item) => {
+    const school = getTextFrom(item, '.education-school');
+    const degree = getTextFrom(item, '.education-degree');
+    const date = getTextFrom(item, '.education-date');
+    if (!school && !degree && !date) return '';
+    return `<div class="resume-entry"><div class="entry-top"><strong>${escapeHtml(degree)}</strong><span>${escapeHtml(date)}</span></div><p class="accent-text">${escapeHtml(school)}</p></div>`;
+  }).join('');
+  const skills = getText('skillsInput').split(',').map((skill) => skill.trim()).filter(Boolean);
+  document.getElementById('previewSkills').innerHTML = skills.map((skill) => `<span>${escapeHtml(skill)}</span>`).join('');
+  document.getElementById('previewCustomSections').innerHTML = [...document.querySelectorAll('#customSections .custom-section')].map((item) => `<section><h3>${escapeHtml(getTextFrom(item, '.custom-title'))}</h3><p>${escapeHtml(getTextFrom(item, '.custom-content'))}</p></section>`).join('');
+}
+
+function getTextFrom(item, selector) { return item.querySelector(selector)?.value.trim() || ''; }
+
+function updatePreview() {
+  Object.entries(fields).forEach(([inputId, previewId]) => { document.getElementById(previewId).textContent = getText(inputId); });
+  updateRepeatingPreview();
+}
+
+function addExperience() {
+  const item = document.createElement('div'); item.className = 'repeatable-item';
+  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label>Kompaniya<input class="experience-company" placeholder="Kompaniya nomi" /></label><label>Lavozim<input class="experience-role" placeholder="Lavozim" /></label><label>Davr<input class="experience-date" placeholder="2022 — 2024" /></label><label class="wide">Tavsif<textarea class="experience-description" rows="3" placeholder="Vazifalaringiz va natijalaringiz"></textarea></label>';
+  document.getElementById('experienceFields').append(item);
+}
+
+function addEducation() {
+  const item = document.createElement('div'); item.className = 'repeatable-item';
+  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label>O\'quv muassasasi<input class="education-school" placeholder="Universitet yoki kurs" /></label><label>Mutaxassislik<input class="education-degree" placeholder="Mutaxassislik" /></label><label>Davr<input class="education-date" placeholder="2018 — 2022" /></label>';
+  document.getElementById('educationFields').append(item);
+}
+
+function addCustomSection() {
+  const item = document.createElement('div'); item.className = 'repeatable-item custom-section';
+  item.innerHTML = '<button class="remove-button" type="button" aria-label="O\'chirish">×</button><label class="wide">Section nomi<input class="custom-title" placeholder="Bo\'lim nomi" /></label><label class="wide">Ma\'lumot<textarea class="custom-content" rows="3" placeholder="Qo\'shimcha ma\'lumot"></textarea></label>';
+  document.getElementById('customSections').append(item); item.querySelector('.custom-title').focus(); updateRepeatingPreview();
+}
+
+const setLanguage = (language) => {
+  const copy = translations[language];
+  document.documentElement.lang = language;
+  document.querySelectorAll('[data-i18n]').forEach((element) => { if (copy[element.dataset.i18n]) element.childNodes[0].textContent = copy[element.dataset.i18n]; });
+  document.getElementById('clearButton').textContent = copy.clear;
+  document.getElementById('themeButton').textContent = document.body.classList.contains('dark-mode') ? copy.light : copy.dark;
+  localStorage.setItem('resume-language', language);
+};
+
+document.querySelectorAll('input, textarea').forEach((input) => input.addEventListener('input', updatePreview));
+document.getElementById('addExperience').addEventListener('click', addExperience);
+document.getElementById('addEducation').addEventListener('click', addEducation);
+document.getElementById('addSection').addEventListener('click', addCustomSection);
+document.addEventListener('click', (event) => { if (event.target.classList.contains('remove-button')) { event.target.parentElement.remove(); updatePreview(); } });
+document.getElementById('photoInput').addEventListener('change', (event) => {
+  const [file] = event.target.files; const photo = document.getElementById('previewPhoto');
+  if (!file) { photo.hidden = true; photo.removeAttribute('src'); return; }
+  const reader = new FileReader(); reader.addEventListener('load', () => { photo.src = reader.result; photo.hidden = false; }); reader.readAsDataURL(file);
+});
+document.getElementById('printButton').addEventListener('click', () => window.print());
+document.getElementById('wordButton').addEventListener('click', () => {
+  const paper = document.getElementById('resumePaper').cloneNode(true); const name = getText('nameInput') || 'resume';
+  const html = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(name)}</title><style>@page{size:A4;margin:1.5cm}body{font-family:Arial;color:#17211b}.resume-paper{width:18cm;margin:auto}.resume-header{display:flex;justify-content:space-between;border-bottom:3px solid #17211b;padding-bottom:18px}.resume-contact{text-align:right;font-size:10px;line-height:1.6}.resume-body{display:flex;gap:28px;padding-top:20px}.resume-main{flex:1}.resume-side{width:130px;border-left:1px solid #ddd;padding-left:18px}p{font-size:11px;line-height:1.55}h3{font-size:10px;text-transform:uppercase;color:#d65a3c}</style></head><body>${paper.outerHTML}</body></html>`;
+  const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword' })); link.download = `${name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.doc`; link.click(); URL.revokeObjectURL(link.href);
+});
+document.querySelectorAll('.swatch').forEach((swatch) => swatch.addEventListener('click', () => { document.documentElement.style.setProperty('--accent', swatch.dataset.color); document.querySelector('.swatch.active')?.classList.remove('active'); swatch.classList.add('active'); }));
+document.querySelectorAll('.style-choice').forEach((choice) => choice.addEventListener('click', () => { document.getElementById('resumePaper').className = `resume-paper style-${choice.dataset.style}`; document.querySelector('.style-choice.active')?.classList.remove('active'); choice.classList.add('active'); }));
+document.getElementById('themeButton').addEventListener('click', () => { document.body.classList.toggle('dark-mode'); setLanguage(document.getElementById('languageSelect').value); });
+document.getElementById('languageSelect').addEventListener('change', (event) => setLanguage(event.target.value));
+document.getElementById('clearButton').addEventListener('click', () => { if (!window.confirm('Barcha ma\'lumotlar tozalansinmi?')) return; document.querySelectorAll('input, textarea').forEach((field) => { if (field.id !== 'photoInput') field.value = ''; }); document.getElementById('previewPhoto').hidden = true; updatePreview(); });
+
+document.querySelector('.resume-footer').textContent = '';
+const staticLanguages = document.querySelector('.resume-side section:nth-child(2)');
+if (staticLanguages) staticLanguages.remove();
+document.getElementById('languageSelect').value = localStorage.getItem('resume-language') || 'uz';
+setLanguage(document.getElementById('languageSelect').value);
+updatePreview();
+
 Object.entries(fields).forEach(([inputId, previewId]) => {
   const input = document.getElementById(inputId);
   const preview = document.getElementById(previewId);
